@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>DVRPC - Aerial Imagery Index Viewer</title>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/typeahead.js-bootstrap.css" rel="stylesheet" type="text/css"> <!--https://github.com/jharding/typeahead.js-bootstrap.css-->
+    <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" /> -->
+
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <!--[if lte IE 8]>
+        <link href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" rel="stylesheet" type="text/css">
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <style>
+        
+        html, body, #map, #container {
+            height: 100%;
+            margin: 0px;
+        }
+
+        body {
+            padding-top: 50px;
+        }
+
+        label {
+            font-weight: normal;
+        }
+
+        #map{
+            padding-top:10px;
+        }
+
+        .panel-heading a:hover {
+            text-decoration: none;
+        }
+
+        #loading {
+            position: absolute;
+            width: 220px;
+            height: 19px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -110px;
+            z-index: 20001;
+        }
+
+		    #title {
+		        position: absolute;
+            width: 220px;
+            height: 19px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -110px;
+            z-index: 20001;
+		    }
+
+        .navbar .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: white;
+            white-space: nowrap;
+        }
+
+    		.navbar-inverse{
+            background-color:#0074ad;
+		    }
+	 
+        @media (max-width: 992px) {
+            .navbar .navbar-brand {
+                font-size: 22px;
+                float: left;
+            }
+            .search-container {
+                width: 150px;
+            }
+            .leaflet-control-attribution {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px){
+            .search-container {
+                width: 100%;
+            }
+        }
+
+        /* Print Handling */
+        @media print {
+            .navbar, .toggle, #sidebar {
+                display: none !important;
+            }
+        }
+    	
+    		.navbar-inverse .navbar-nav > li > a {
+            color: rgb(200, 200, 200);
+        }
+
+        .modal-header {
+            background-color:#0074ad;
+        }
+
+        .modal-title  {
+          color: white;
+        }
+
+      body {
+          overflow-y:hidden;
+      }
+
+      .close {
+          float: right;
+          font-size: 21px;
+          font-weight: bold;
+          line-height: 1;
+          color: white;
+          text-shadow: 0px 1px 0px rgb(255, 255, 255);
+          opacity: 1;
+      }
+
+    </style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+        <script src="js/css3-mediaqueries.ie.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+      <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+        			<span>	
+          			<a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
+          		  <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
+        			</span> 
+          </div>
+          <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+  			        <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a></li>
+
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a></li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+      </div>
+
+      <div class="row" id="container">
+  		    <div class="col-sm-12 col-lg-12" id="map"></div>		  
+      </div>
+
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+      <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  
+		  <div class="modal fade" id="aboutModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">DVRPC - Aerial Imagery Index Viewer</h4>
+                  </div>
+
+                  <div class="modal-body">
+                      <ul id="aboutTabs" class="nav nav-tabs">
+                          <li class="active"><a href="#about" data-toggle="tab"><i class=""></i>&nbsp;About</a></li>
+                          <li><a href="#disclaimer" data-toggle="tab"><i class="i"></i>&nbsp;Disclaimer</a></li>
+                      </ul>
+                      <div id="aboutTabsContent" class="tab-content" style="padding-top: 10px;">
+                          <div class="tab-pane fade active in" id="about">
+                              <b><font color=red>PLEASE NOTE:</font></b>
+                              <font color=grey>
+                              <br>
+                                  This aerial imagery index viewer utilizes Google's basemap layers. Therefore, the imagery shown within the viewer is not DVRPC imagery. 
+                                  The Google imagery is utilized simply as a reference to assist the user in locating his or her area of interest.</font> <br>
+                              
+                              <h3>Map Navigation:</h3>
+                              <p>Click-and-drag on the map to pan, or use your mouse wheel to zoom in/out.You may also use the plus (+) or minus (-) to zoom in/out of the map.  Double-clicking on an area will also zoom in.</p>
+                              
+                              <br>
+                              
+                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
+                          </div>
+  	
+                          <div class="tab-pane fade text-danger" id="disclaimer">
+                              <p>The data provided on this site is for informational and planning purposes only.</p>
+                              <p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
+                          </div>
+                      </div>                   
+                  </div><!-- /.modal-body -->
+              </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+      </div><!-- /#aboutModal -->
+        
+ 
+
+
+      <div class="modal fade" id="contactModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Contact Us!</h4>
+                  </div>
+                  <div class="modal-body">
+                      <p><b>Resource Center</b>
+                          <br>
+                            Delaware Valley Regional Planning Commission<br>
+                            190 N. Independence Mall West, 8th Floor<br>
+                            Philadelphia, PA 19106<br>
+                            Phone: 215-238-2825<br>
+                            Fax: 215-592-9125<br>
+                          <a href="mailto:mapsales@dvrpc.org">mapsales@dvrpc.org</a><br/>
+        				      </p>
+                  </div><!-- /.modal-body -->
+              </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+      </div><!-- /.modal fade-->
+		      
+
+
+      <div class="modal fade" id="legendModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Legend</h4>
+                  </div>
+
+                  <div class="modal-body">
+                      <ul id="aboutTabs" class="nav nav-tabs">
+                          <li class="active"><a href="#2000" data-toggle="tab"><i class=""></i>&nbsp;Orthoimagery</a></li>
+                          <li><a href="#1965" data-toggle="tab"><i class="i"></i>&nbsp;Historical Imagery</a></li>
+                      </ul>
+                      <div id="legendTabsContent" class="tab-content" style="padding-top: 10px;">   
+                          <div class="tab-pane fade active in" id="2000">
+                              <h3>Orthoimagery</h3>
+                              <img  src="img/tilePA.png"/>
+                              <img  src="img/tileNJ.png"/> 
+                              <br>
+                              <ul>
+                                  <li>The 2000 imagery is grayscale, with a pixel resolution of 1.5 feet</li>
+                                  <li>The 2005 and 2010 imagery is natural color, with a pixel resolution of 1 foot</li>
+                                  <li>The images are geo-referenced to the Pennsylvania State Plane (South Zone) NAD83 coordinate system</li>
+                                  <li>Each year of orthoimagery has a horizontal positional accuracy of +/- 5 feet, and a design scale of 1 inch=200 feet</li>
+                                  <li>There is no overlap between the orthoimagery tiles</li>
+                              </ul>
+                          </div>
+                  
+                          <div class="tab-pane fade " id="1965">
+                              <h3>Historic Aerial Imagery</h3>
+                              <div class="group">
+                                  <img id="legend" src="img/tile65.png"/>
+                                  <br>
+                                  <ul>    
+                                      <li>The 1965 to 1995 imagery is grayscale</li> 
+                                      <li>These images are scans of DVRPC's non-orthorectified, mylar, aerial photo enlargements</li> 
+                                      <li>In 1965, only imagery for the urbanized portion of the region was acquired</li> 
+                                      <li>Please note that certain tiles within the coverage area are missing</li> 
+                                  </ul> 
+                                  <img id="legend" src="img/tile59.png"/>
+                                  <br>
+                                  <ul>
+                                      <li>The 1959 imagery is grayscale</li> 
+                                      <li>These images are scans of DVRPC's non-orthorectified, mylar, aerial photo enlargements</li>
+                                      <li>In 1959, only imagery for the urbanized portion of the region was acquired</li> 
+                                      <li> Please note that certain tiles within the coverage area are missing</li>
+                                  </ul>   
+                              </div>
+                          </div>                   
+                      </div>
+                  </div>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+
+      <script type="text/javascript">
+      
+          $(document).ready(function() {
+          //  $('[rel=tooltip]').tooltip();
+
+          //OPEN ABOUT DIALOG
+              $('#aboutModal').modal();
+          });
+
+          var map = L.map('map').setView([40.0249151, -75.5829004], 9);
+
+          L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+              attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+          }).addTo(map);
+      
+      </script>
+      
+      <script>
+          
+          var _gaq =[['_setAccount','UA-9825778-1'],['_trackPageview']];
+
+          (function(d){
+              var g = d.createElement('script'),
+                  s = d.scripts[0];
+              g.src='//www.google-analytics.com/ga.js';
+              s.parentNode.insertBefore(g,s)
+          }(document))
+
+
+      </script>
+  </body>
+</html>

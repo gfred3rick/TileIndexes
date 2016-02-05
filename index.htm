@@ -336,7 +336,7 @@
               // 1959 INDEX DATA //
               var index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');
-              // index1959.setMap(map);
+              index1959.setMap(map);
               index1959.setStyle(function(feature){
                   return {
                       clickable: true,
@@ -355,8 +355,13 @@
                       strokeWeight: 5
                   });
 
-                  infowindow.setContent("<div id='index-window'><b><font color='orange'>1959 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>")
-                  infowindow.open(map);
+                  infowindow.setContent("<div id='index-window'><b><font color='orange'>1959 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>");
+
+                  // Popup Anchor //
+                  var anchor = new google.maps.MVCObject();
+                  anchor.set("position", e.latLng);
+                  
+                  infowindow.open(map, anchor);
               });
 
 
@@ -384,13 +389,18 @@
                       strokeOpacity: 1
                   });
 
-                  infowindow.setContent("<div id='index-window'><b><font color='purple'>1965 - 1995 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>")
-                  infowindow.open(map);
+                  infowindow.setContent("<div id='index-window'><b><font color='purple'>1965 - 1995 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>");
+                  
+                  // Popup Anchor //
+                  var anchor = new google.maps.MVCObject();
+                  anchor.set("position", e.latLng);
+                  
+                  infowindow.open(map,anchor);
               });
 
               var indexPA = new google.maps.Data();
               indexPA.loadGeoJson('data/DVRPC_PA_SP_index_.js');
-              indexPA.setMap(map);
+              // indexPA.setMap(map);
               indexPA.setStyle(function(feature){
                   return {
                       clickable:true,
@@ -403,20 +413,9 @@
               });
 
 
-              // function getLat(feature){
-              //     var props = feature.getProperty('lat_cent')
-              //         return { props };
-              // }
               
 
-              // function getLng(feature){
-              //     var props = feature.getProperty('lng_cent')
-              //         return { props };
-              // }
-
               paLatLng = new google.maps.LatLng()
-
-
 
               indexPA.addListener('click', function(e){
                   indexPA.revertStyle();
@@ -427,12 +426,14 @@
                       strokeOpacity: 1
                   });
 
-                  paLatLng.lat(e.feature.getProperty('lat_cent');
-                  paLatLng.lng(e.feature.getProperty('lng_cent');
+                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2010 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+                  
+                  // Popup Anchor //
+                  var anchor = new google.maps.MVCObject();
+                  anchor.set("position", e.latLng);
+                  
+                  infowindow.open(map,anchor);
 
-                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2010 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>")
-                  infowindow.getPosition(paLatLng);
-                  infowindow.open(map);
               });
 
               var indexNJ = new google.maps.Data();
@@ -457,8 +458,13 @@
                       strokeOpacity: 1
                   });
 
-                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>")
-                  infowindow.open(map);
+                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+
+                  // Popup Anchor //
+                  var anchor = new google.maps.MVCObject();
+                  anchor.set("position", e.latLng);
+
+                  infowindow.open(map, anchor);
               });
 
 

@@ -12,7 +12,6 @@
 <!--     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" /> -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="css/typeahead.js-bootstrap.css" rel="stylesheet" type="text/css"> <!--https://github.com/jharding/typeahead.js-bootstrap.css-->
     <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" /> -->
 
     <!--[if lte IE 8]>
@@ -40,6 +39,32 @@
             padding-top:10px;
         }
 
+
+        #legend-stack {
+            position: fixed;
+            z-index: 100;
+            width: 200px;
+            bottom: 20px;
+            right: 75px;
+     /*       background-color: white;*/
+            border-radius: 4px;
+        }
+
+        .legend-custom {
+            border: 0.5px solid gray;
+            box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .bkg {
+            display: inline-block;
+            list-style-type: none;
+            margin-top: 10px;
+            margin-left: -10px;
+            vertical-align: middle;
+        }
+
         .panel-heading a:hover {
             text-decoration: none;
         }
@@ -54,15 +79,15 @@
             z-index: 20001;
         }
 
-		    #title {
-		        position: absolute;
+        #title {
+            position: absolute;
             width: 220px;
             height: 19px;
             top: 50%;
             left: 50%;
             margin: -10px 0 0 -110px;
             z-index: 20001;
-		    }
+        }
 
         .navbar .navbar-brand {
             font-weight: bold;
@@ -71,10 +96,10 @@
             white-space: nowrap;
         }
 
-    		.navbar-inverse{
+        .navbar-inverse{
             background-color:#0074ad;
-		    }
-	 
+        }
+   
         @media (max-width: 992px) {
             .navbar .navbar-brand {
                 font-size: 22px;
@@ -100,8 +125,8 @@
                 display: none !important;
             }
         }
-    	
-    		.navbar-inverse .navbar-nav > li > a {
+      
+        .navbar-inverse .navbar-nav > li > a {
             color: rgb(200, 200, 200);
         }
 
@@ -113,27 +138,52 @@
           color: white;
         }
 
-      body {
-          overflow-y:hidden;
-      }
+        body {
+            overflow-y:hidden;
+        }
 
-      .close {
-          float: right;
-          font-size: 21px;
-          font-weight: bold;
-          line-height: 1;
-          color: white;
-          text-shadow: 0px 1px 0px rgb(255, 255, 255);
-          opacity: 1;
-      }
+        .close {
+            float: right;
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 1;
+            color: white;
+            text-shadow: 0px 1px 0px rgb(255, 255, 255);
+            opacity: 1;
+        }
 
-      #index-window {
-          display: inline-block;
-      }
+        #index-window {
+            display: inline-block;
+        }
+
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+              -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          }
+
+        #pac-input {
+            background-color: #fff;
+            font-size: 15px;
+            font-weight: 300;
+           /* text-overflow: ellipsis;*/
+            width: 300px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
+        }
+
 
 
 
     </style>
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -154,29 +204,68 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-        			<span>	
-          			<a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
-          		  <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
-        			</span> 
+              <span>  
+                <a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
+                <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
+              </span> 
           </div>
           <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav navbar-right">
-  			        <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a></li>
-
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a></li>
-            </ul>
+              <ul class="nav navbar-nav">
+            <li><a href="#aboutModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a></li>
+                <li><a href="#contactModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a></li>
+                <li><a href="#legendModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a></li>
+                <!-- <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="margin-right: 15px;"><span class="glyphicon glyphicon-search"></span> -->
+              </ul>
+              <form class="navbar-form navbar-right">
+                  <div class="input-group search-container">
+                      <input id="pac-input" class="form-control" type="text" placeholder="Search Box">
+                      <span class="input-group-addon">
+                          <i class="glyphicon glyphicon-search"></i>
+                      </span>
+                  </div>
+              </form>
           </div><!--/.navbar-collapse -->
       </div>
 
       <div class="row" id="container">
-  		    <div class="col-sm-12 col-lg-12" id="map"></div>		  
+          <div id="legend-stack">
+              <div class="legend-custom">
+                  <ul>
+                      <li class="bkg">
+                          <div class="bullet"><img src="img/tile59.png"></div>
+                      </li>
+                  </ul>
+              </div>
+              <div class="legend-custom">
+                  <ul>
+                      <li class="bkg">
+                          <div class="bullet"><img src="img/tile65.png"></div>
+                      </li>
+                  </ul>
+              </div>
+              <div class="legend-custom">
+                  <ul>
+                      <li class="bkg">
+                          <div class="bullet"><img src="img/tileNJ.png"></div>
+                      </li>
+                  </ul>
+              </div>
+              <div class="legend-custom">
+                  <ul>
+                      <li class="bkg">
+                          <div class="bullet"><img src="img/tilePA.png"></div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          <div class="col-sm-12 col-lg-12" id="map"></div>
+          
       </div>
 
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
       <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   
-		  <div class="modal fade" id="aboutModal">
+      <div class="modal fade" id="aboutModal">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
@@ -204,7 +293,7 @@
                               
                               <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
                           </div>
-  	
+    
                           <div class="tab-pane fade text-danger" id="disclaimer">
                               <p>The data provided on this site is for informational and planning purposes only.</p>
                               <p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
@@ -234,12 +323,12 @@
                             Phone: 215-238-2825<br>
                             Fax: 215-592-9125<br>
                           <a href="mailto:mapsales@dvrpc.org">mapsales@dvrpc.org</a><br/>
-        				      </p>
+                      </p>
                   </div><!-- /.modal-body -->
               </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
       </div><!-- /.modal fade-->
-		      
+          
 
 
       <div class="modal fade" id="legendModal">
@@ -298,7 +387,8 @@
       </div><!-- /.modal-dialog -->
 
 
-      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> 
+      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> 
+      <script src="js/jquery.geocomplete.js"></script>
       <script type="text/javascript">
       
           $(document).ready(function() {
@@ -330,7 +420,6 @@
                   mapTypeId: google.maps.MapTypeId.HYBRID
               });
 
-
               var infowindow = new google.maps.InfoWindow();
 
               // 1959 INDEX DATA //
@@ -343,7 +432,7 @@
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
                       fillColor: '#ffa500',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   } 
               });
 
@@ -376,7 +465,7 @@
                       strokeWeight: 1.0,
                       strokeOpacity: 1.0,
                       fillColor: '#730073',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   }
               });
 
@@ -408,13 +497,11 @@
                       strokeWeight: 1.0,
                       strokeOpacity: 1.0,
                       fillColor: '#008000',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   }
               });
 
-
-              
-
+          
               paLatLng = new google.maps.LatLng()
 
               indexPA.addListener('click', function(e){
@@ -446,7 +533,7 @@
                       strokeWeight:1,
                       strokeOpacity: 1,
                       fillColor: '#b20000',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   }
               });
 
@@ -467,16 +554,12 @@
                   infowindow.open(map, anchor);
               });
 
+              //Geocoding / Search Bar
+              var options = {
+                  map: map
+              };
 
-
-
-
-
-
-
-
-
-
+              $("#pac-input").geocomplete(options);
           }
 
 

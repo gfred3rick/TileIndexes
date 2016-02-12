@@ -12,6 +12,7 @@
 <!--     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" /> -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" /> -->
 
     <!--[if lte IE 8]>
@@ -43,28 +44,23 @@
         #legend-stack {
             position: fixed;
             z-index: 100;
-            width: 200px;
-            bottom: 20px;
-            right: 75px;
+            width: 250px;
+            top: 50px;
+            right: 30px;
      /*       background-color: white;*/
             border-radius: 4px;
         }
 
         .legend-custom {
+
             border: 0.5px solid gray;
             box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.2);
             border-radius: 4px;
             background-color: white;
+            margin-top: 3px;
+            margin-left: 25px;
         }
-
-        .bkg {
-            display: inline-block;
-            list-style-type: none;
-            margin-top: 10px;
-            margin-left: -10px;
-            vertical-align: middle;
-        }
-
+        
         .panel-heading a:hover {
             text-decoration: none;
         }
@@ -218,7 +214,7 @@
               </ul>
               <form class="navbar-form navbar-right">
                   <div class="input-group search-container">
-                      <input id="pac-input" class="form-control" type="text" placeholder="Search Box">
+                      <input id="pac-input" class="form-control" type="text" placeholder="Search...">
                       <span class="input-group-addon">
                           <i class="glyphicon glyphicon-search"></i>
                       </span>
@@ -229,33 +225,21 @@
 
       <div class="row" id="container">
           <div id="legend-stack">
-              <div class="legend-custom">
-                  <ul>
-                      <li class="bkg">
-                          <div class="bullet"><img src="img/tile59.png"></div>
-                      </li>
-                  </ul>
+              <div class="legend-custom" id="tile59">
+                  <input type="checkbox" name="my-checkbox" data-layer="index1959" />
+                  <img src="img/tile59.png">
               </div>
-              <div class="legend-custom">
-                  <ul>
-                      <li class="bkg">
-                          <div class="bullet"><img src="img/tile65.png"></div>
-                      </li>
-                  </ul>
+              <div class="legend-custom" id="tile65">
+                  <input type="checkbox" name="my-checkbox" data-layer="index65_95" />
+                  <img src="img/tile65.png">
               </div>
-              <div class="legend-custom">
-                  <ul>
-                      <li class="bkg">
-                          <div class="bullet"><img src="img/tileNJ.png"></div>
-                      </li>
-                  </ul>
+              <div class="legend-custom" id="tileNJ">
+                  <input type="checkbox" name="my-checkbox" data-layer="indexNJ" checked />
+                  <img src="img/tileNJ.png">
               </div>
-              <div class="legend-custom">
-                  <ul>
-                      <li class="bkg">
-                          <div class="bullet"><img src="img/tilePA.png"></div>
-                      </li>
-                  </ul>
+              <div class="legend-custom" id="tilePA">
+                  <input type="checkbox" name="my-checkbox" data-layer="indexPA" checked />
+                  <img src="img/tilePA.png">  
               </div>
           </div>
           <div class="col-sm-12 col-lg-12" id="map"></div>
@@ -291,7 +275,7 @@
                               
                               <br>
                               
-                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
+                              <p>To search for a specific location use the search form <img src="img/search2.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
                           </div>
     
                           <div class="tab-pane fade text-danger" id="disclaimer">
@@ -389,6 +373,7 @@
 
       <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> 
       <script src="js/jquery.geocomplete.js"></script>
+      <script src="js/bootstrap-switch.min.js"></script>
       <script type="text/javascript">
       
           $(document).ready(function() {
@@ -398,13 +383,39 @@
               $('#aboutModal').modal();
           });
 
-          // var map = L.map('map').setView([40.0249151, -75.5829004], 9);
-
           var map;
           var MY_MAPTYPE_ID = 'Basemap';
           var streeViewService = new google.maps.StreetViewService();
 
           var region = new google.maps.LatLng(39.950143, -75.170669);
+
+
+          // $('input[name="my-checkbox"]').bootstrapSwitch();
+
+          $("[name='my-checkbox']").bootstrapSwitch({
+               onColor: 'warning',
+               offColor: 'default',
+               size: 'normal',
+               onText: 'On',
+               offText: 'Off',
+               handleWidth: 50,
+               labelWidth: 25,
+               onSwitchChange: function(event,state){
+                  var dataLayer = window[$(this).attr('data-layer')];
+                  var item = $(this);
+                  
+                  if (state === true){
+                    dataLayer.forEach(function(d) {
+                        dataLayer.overrideStyle(d, {visible: true});
+                    });
+                  } else {
+                    dataLayer.forEach(function(d) {
+                        dataLayer.overrideStyle(d, {visible: false});
+                    });
+                      
+                  } 
+              }
+          });
 
 ////////////////////////////////////////////////
 ////////////Initialize map on load//////////////
@@ -423,11 +434,12 @@
               var infowindow = new google.maps.InfoWindow();
 
               // 1959 INDEX DATA //
-              var index1959 = new google.maps.Data();
+              index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');
               index1959.setMap(map);
               index1959.setStyle(function(feature){
                   return {
+                      visible: false,
                       clickable: true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -441,7 +453,7 @@
                   index1959.overrideStyle(e.feature, {
                       fillColor: '#ff0000',
                       strokeColor: '#fff',
-                      strokeWeight: 5
+                      strokeWeight: 5,
                   });
 
                   infowindow.setContent("<div id='index-window'><b><font color='orange'>1959 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>");
@@ -453,13 +465,13 @@
                   infowindow.open(map, anchor);
               });
 
-
               // 1965-1995 INDEX DATA //
-              var index65_95 = new google.maps.Data();
+              index65_95 = new google.maps.Data();
               index65_95.loadGeoJson('data/DVRPC_1965_1995_index.js');
-              // index65_95.setMap(map);
+              index65_95.setMap(map);
               index65_95.setStyle(function(feature){
                   return {
+                      visible: false,
                       clickable:true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -487,11 +499,12 @@
                   infowindow.open(map,anchor);
               });
 
-              var indexPA = new google.maps.Data();
+              indexPA = new google.maps.Data();
               indexPA.loadGeoJson('data/DVRPC_PA_SP_index_.js');
-              // indexPA.setMap(map);
+              indexPA.setMap(map);
               indexPA.setStyle(function(feature){
                   return {
+                      visible: true,
                       clickable:true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -508,7 +521,7 @@
                   indexPA.revertStyle();
                   indexPA.overrideStyle(e.feature, {
                       fillColor: '#b2d8b2',
-                      strokeColor: '#003300',
+                      strokeColor: '#28a428',
                       strokeWeight: 5,
                       strokeOpacity: 1
                   });
@@ -523,17 +536,18 @@
 
               });
 
-              var indexNJ = new google.maps.Data();
+              indexNJ = new google.maps.Data();
               indexNJ.loadGeoJson('data/DVRPC_NJ_SP_index.js');
-              // indexNJ.setMap(map);
+              indexNJ.setMap(map);
               indexNJ.setStyle(function(feature){
                   return {
-                      clickable:true,
                       strokeColor: '#fff',
                       strokeWeight:1,
                       strokeOpacity: 1,
                       fillColor: '#b20000',
-                      fillOpacity: 0.35
+                      fillOpacity: 0.35,
+                      visible: true,
+                      clickable:true
                   }
               });
 
@@ -542,8 +556,11 @@
                   indexNJ.overrideStyle(e.feature, {
                       strokeColor: '#ff0000',
                       strokeWeight:5,
-                      strokeOpacity: 1
+                      strokeOpacity: 1,
+                      fillColor: '#b20000',
+                      fillOpacity: 0.35
                   });
+
 
                   infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
 
@@ -552,6 +569,7 @@
                   anchor.set("position", e.latLng);
 
                   infowindow.open(map, anchor);
+
               });
 
               //Geocoding / Search Bar
@@ -560,6 +578,13 @@
               };
 
               $("#pac-input").geocomplete(options);
+
+              google.maps.event.addListener(map, 'click', function() {
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
+              });
           }
 
 

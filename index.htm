@@ -234,7 +234,7 @@
                   <img src="img/tile65.png">
               </div>
               <div class="legend-custom" id="tileNJ">
-                  <input type="checkbox" name="my-checkbox" data-layer="indexNJ" checked />
+                  <input id="NJ" type="checkbox" name="my-checkbox" data-layer="indexNJ" checked />
                   <img src="img/tileNJ.png">
               </div>
               <div class="legend-custom" id="tilePA">
@@ -360,7 +360,7 @@
                                       <li>The 1959 imagery is grayscale</li> 
                                       <li>These images are scans of DVRPC's non-orthorectified, mylar, aerial photo enlargements</li>
                                       <li>In 1959, only imagery for the urbanized portion of the region was acquired</li> 
-                                      <li> Please note that certain tiles within the coverage area are missing</li>
+                                      <li>Please note that certain tiles within the coverage area are missing</li>
                                   </ul>   
                               </div>
                           </div>                   
@@ -403,17 +403,12 @@
                onSwitchChange: function(event,state){
                   var dataLayer = window[$(this).attr('data-layer')];
                   var item = $(this);
-                  
-                  if (state === true){
-                    dataLayer.forEach(function(d) {
-                        dataLayer.overrideStyle(d, {visible: true});
-                    });
+                
+                  if (state === true) {
+                      dataLayer.setMap(map);
                   } else {
-                    dataLayer.forEach(function(d) {
-                        dataLayer.overrideStyle(d, {visible: false});
-                    });
-                      
-                  } 
+                      dataLayer.setMap(null);
+                  }
               }
           });
 
@@ -436,10 +431,9 @@
               // 1959 INDEX DATA //
               index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');
-              index1959.setMap(map);
+              // index1959.setMap(map);
               index1959.setStyle(function(feature){
                   return {
-                      visible: false,
                       clickable: true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -468,10 +462,9 @@
               // 1965-1995 INDEX DATA //
               index65_95 = new google.maps.Data();
               index65_95.loadGeoJson('data/DVRPC_1965_1995_index.js');
-              index65_95.setMap(map);
+              // index65_95.setMap(map);
               index65_95.setStyle(function(feature){
                   return {
-                      visible: false,
                       clickable:true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -504,7 +497,6 @@
               indexPA.setMap(map);
               indexPA.setStyle(function(feature){
                   return {
-                      visible: true,
                       clickable:true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
@@ -546,7 +538,6 @@
                       strokeOpacity: 1,
                       fillColor: '#b20000',
                       fillOpacity: 0.35,
-                      visible: true,
                       clickable:true
                   }
               });

@@ -12,7 +12,7 @@
 <!--     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" /> -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="css/typeahead.js-bootstrap.css" rel="stylesheet" type="text/css"> <!--https://github.com/jharding/typeahead.js-bootstrap.css-->
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" /> -->
 
     <!--[if lte IE 8]>
@@ -40,6 +40,27 @@
             padding-top:10px;
         }
 
+
+        #legend-stack {
+            position: fixed;
+            z-index: 100;
+            width: 250px;
+            top: 50px;
+            right: 30px;
+     /*       background-color: white;*/
+            border-radius: 4px;
+        }
+
+        .legend-custom {
+
+            border: 0.5px solid gray;
+            box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background-color: white;
+            margin-top: 3px;
+            margin-left: 25px;
+        }
+        
         .panel-heading a:hover {
             text-decoration: none;
         }
@@ -54,15 +75,15 @@
             z-index: 20001;
         }
 
-		    #title {
-		        position: absolute;
+        #title {
+            position: absolute;
             width: 220px;
             height: 19px;
             top: 50%;
             left: 50%;
             margin: -10px 0 0 -110px;
             z-index: 20001;
-		    }
+        }
 
         .navbar .navbar-brand {
             font-weight: bold;
@@ -71,10 +92,10 @@
             white-space: nowrap;
         }
 
-    		.navbar-inverse{
+        .navbar-inverse{
             background-color:#0074ad;
-		    }
-	 
+        }
+   
         @media (max-width: 992px) {
             .navbar .navbar-brand {
                 font-size: 22px;
@@ -100,8 +121,8 @@
                 display: none !important;
             }
         }
-    	
-    		.navbar-inverse .navbar-nav > li > a {
+      
+        .navbar-inverse .navbar-nav > li > a {
             color: rgb(200, 200, 200);
         }
 
@@ -113,27 +134,52 @@
           color: white;
         }
 
-      body {
-          overflow-y:hidden;
-      }
+        body {
+            overflow-y:hidden;
+        }
 
-      .close {
-          float: right;
-          font-size: 21px;
-          font-weight: bold;
-          line-height: 1;
-          color: white;
-          text-shadow: 0px 1px 0px rgb(255, 255, 255);
-          opacity: 1;
-      }
+        .close {
+            float: right;
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 1;
+            color: white;
+            text-shadow: 0px 1px 0px rgb(255, 255, 255);
+            opacity: 1;
+        }
 
-      #index-window {
-          display: inline-block;
-      }
+        #index-window {
+            display: inline-block;
+        }
+
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+              -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          }
+
+        #pac-input {
+            background-color: #fff;
+            font-size: 15px;
+            font-weight: 300;
+           /* text-overflow: ellipsis;*/
+            width: 300px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
+        }
+
 
 
 
     </style>
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -154,29 +200,56 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-        			<span>	
-          			<a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
-          		  <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
-        			</span> 
+              <span>  
+                <a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
+                <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
+              </span> 
           </div>
           <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav navbar-right">
-  			        <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a></li>
-
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a></li>
-            </ul>
+              <ul class="nav navbar-nav">
+            <li><a href="#aboutModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a></li>
+                <li><a href="#contactModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a></li>
+                <li><a href="#legendModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a></li>
+                <!-- <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="margin-right: 15px;"><span class="glyphicon glyphicon-search"></span> -->
+              </ul>
+              <form class="navbar-form navbar-right">
+                  <div class="input-group search-container">
+                      <input id="pac-input" class="form-control" type="text" placeholder="Search...">
+                      <span class="input-group-addon">
+                          <i class="glyphicon glyphicon-search"></i>
+                      </span>
+                  </div>
+              </form>
           </div><!--/.navbar-collapse -->
       </div>
 
       <div class="row" id="container">
-  		    <div class="col-sm-12 col-lg-12" id="map"></div>		  
+          <div id="legend-stack">
+              <div class="legend-custom" id="tile59">
+                  <input type="checkbox" name="my-checkbox" data-layer="index1959" />
+                  <img src="img/tile59.png">
+              </div>
+              <div class="legend-custom" id="tile65">
+                  <input type="checkbox" name="my-checkbox" data-layer="index65_95" />
+                  <img src="img/tile65.png">
+              </div>
+              <div class="legend-custom" id="tileNJ">
+                  <input id="NJ" type="checkbox" name="my-checkbox" data-layer="indexNJ" checked />
+                  <img src="img/tileNJ.png">
+              </div>
+              <div class="legend-custom" id="tilePA">
+                  <input type="checkbox" name="my-checkbox" data-layer="indexPA" checked />
+                  <img src="img/tilePA.png">  
+              </div>
+          </div>
+          <div class="col-sm-12 col-lg-12" id="map"></div>
+          
       </div>
 
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
       <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   
-		  <div class="modal fade" id="aboutModal">
+      <div class="modal fade" id="aboutModal">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
@@ -202,9 +275,9 @@
                               
                               <br>
                               
-                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
+                              <p>To search for a specific location use the search form <img src="img/search2.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
                           </div>
-  	
+    
                           <div class="tab-pane fade text-danger" id="disclaimer">
                               <p>The data provided on this site is for informational and planning purposes only.</p>
                               <p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
@@ -234,12 +307,12 @@
                             Phone: 215-238-2825<br>
                             Fax: 215-592-9125<br>
                           <a href="mailto:mapsales@dvrpc.org">mapsales@dvrpc.org</a><br/>
-        				      </p>
+                      </p>
                   </div><!-- /.modal-body -->
               </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
       </div><!-- /.modal fade-->
-		      
+          
 
 
       <div class="modal fade" id="legendModal">
@@ -287,7 +360,7 @@
                                       <li>The 1959 imagery is grayscale</li> 
                                       <li>These images are scans of DVRPC's non-orthorectified, mylar, aerial photo enlargements</li>
                                       <li>In 1959, only imagery for the urbanized portion of the region was acquired</li> 
-                                      <li> Please note that certain tiles within the coverage area are missing</li>
+                                      <li>Please note that certain tiles within the coverage area are missing</li>
                                   </ul>   
                               </div>
                           </div>                   
@@ -298,7 +371,9 @@
       </div><!-- /.modal-dialog -->
 
 
-      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> 
+      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> 
+      <script src="js/jquery.geocomplete.js"></script>
+      <script src="js/bootstrap-switch.min.js"></script>
       <script type="text/javascript">
       
           $(document).ready(function() {
@@ -308,13 +383,34 @@
               $('#aboutModal').modal();
           });
 
-          // var map = L.map('map').setView([40.0249151, -75.5829004], 9);
-
           var map;
           var MY_MAPTYPE_ID = 'Basemap';
           var streeViewService = new google.maps.StreetViewService();
 
           var region = new google.maps.LatLng(39.950143, -75.170669);
+
+
+          // $('input[name="my-checkbox"]').bootstrapSwitch();
+
+          $("[name='my-checkbox']").bootstrapSwitch({
+               onColor: 'warning',
+               offColor: 'default',
+               size: 'normal',
+               onText: 'On',
+               offText: 'Off',
+               handleWidth: 50,
+               labelWidth: 25,
+               onSwitchChange: function(event,state){
+                  var dataLayer = window[$(this).attr('data-layer')];
+                  var item = $(this);
+                
+                  if (state === true) {
+                      dataLayer.setMap(map);
+                  } else {
+                      dataLayer.setMap(null);
+                  }
+              }
+          });
 
 ////////////////////////////////////////////////
 ////////////Initialize map on load//////////////
@@ -330,20 +426,19 @@
                   mapTypeId: google.maps.MapTypeId.HYBRID
               });
 
-
               var infowindow = new google.maps.InfoWindow();
 
               // 1959 INDEX DATA //
-              var index1959 = new google.maps.Data();
+              index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');
-              index1959.setMap(map);
+              // index1959.setMap(map);
               index1959.setStyle(function(feature){
                   return {
                       clickable: true,
                       strokeColor: '#fff',
                       strokeWeight: 1.0,
                       fillColor: '#ffa500',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   } 
               });
 
@@ -352,7 +447,7 @@
                   index1959.overrideStyle(e.feature, {
                       fillColor: '#ff0000',
                       strokeColor: '#fff',
-                      strokeWeight: 5
+                      strokeWeight: 5,
                   });
 
                   infowindow.setContent("<div id='index-window'><b><font color='orange'>1959 SHEET ID</font></b><br>" + e.feature.getProperty("SHEET_ID") + "</div>");
@@ -364,9 +459,8 @@
                   infowindow.open(map, anchor);
               });
 
-
               // 1965-1995 INDEX DATA //
-              var index65_95 = new google.maps.Data();
+              index65_95 = new google.maps.Data();
               index65_95.loadGeoJson('data/DVRPC_1965_1995_index.js');
               // index65_95.setMap(map);
               index65_95.setStyle(function(feature){
@@ -376,7 +470,7 @@
                       strokeWeight: 1.0,
                       strokeOpacity: 1.0,
                       fillColor: '#730073',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   }
               });
 
@@ -398,9 +492,9 @@
                   infowindow.open(map,anchor);
               });
 
-              var indexPA = new google.maps.Data();
+              indexPA = new google.maps.Data();
               indexPA.loadGeoJson('data/DVRPC_PA_SP_index_.js');
-              // indexPA.setMap(map);
+              indexPA.setMap(map);
               indexPA.setStyle(function(feature){
                   return {
                       clickable:true,
@@ -408,20 +502,18 @@
                       strokeWeight: 1.0,
                       strokeOpacity: 1.0,
                       fillColor: '#008000',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35
                   }
               });
 
-
-              
-
+          
               paLatLng = new google.maps.LatLng()
 
               indexPA.addListener('click', function(e){
                   indexPA.revertStyle();
                   indexPA.overrideStyle(e.feature, {
                       fillColor: '#b2d8b2',
-                      strokeColor: '#003300',
+                      strokeColor: '#28a428',
                       strokeWeight: 5,
                       strokeOpacity: 1
                   });
@@ -436,17 +528,17 @@
 
               });
 
-              var indexNJ = new google.maps.Data();
+              indexNJ = new google.maps.Data();
               indexNJ.loadGeoJson('data/DVRPC_NJ_SP_index.js');
-              // indexNJ.setMap(map);
+              indexNJ.setMap(map);
               indexNJ.setStyle(function(feature){
                   return {
-                      clickable:true,
                       strokeColor: '#fff',
                       strokeWeight:1,
                       strokeOpacity: 1,
                       fillColor: '#b20000',
-                      fillOpacity: 0.5
+                      fillOpacity: 0.35,
+                      clickable:true
                   }
               });
 
@@ -455,8 +547,11 @@
                   indexNJ.overrideStyle(e.feature, {
                       strokeColor: '#ff0000',
                       strokeWeight:5,
-                      strokeOpacity: 1
+                      strokeOpacity: 1,
+                      fillColor: '#b20000',
+                      fillOpacity: 0.35
                   });
+
 
                   infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
 
@@ -465,18 +560,22 @@
                   anchor.set("position", e.latLng);
 
                   infowindow.open(map, anchor);
+
               });
 
+              //Geocoding / Search Bar
+              var options = {
+                  map: map
+              };
 
+              $("#pac-input").geocomplete(options);
 
-
-
-
-
-
-
-
-
+              google.maps.event.addListener(map, 'click', function() {
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
+              });
           }
 
 

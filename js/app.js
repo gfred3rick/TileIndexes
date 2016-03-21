@@ -48,7 +48,9 @@
                   zoom: 9,
                   mapTypeId: google.maps.MapTypeId.HYBRID
               });
-
+              //enable KeyDragzoom function
+              map.enableKeyDragZoom();  
+              
               var infowindow = new google.maps.InfoWindow();
 
               // 1959 INDEX DATA //
@@ -66,6 +68,9 @@
               });
 
               index1959.addListener('click', function(e){
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
                   index1959.revertStyle();
                   index1959.overrideStyle(e.feature, {
                       fillColor: '#ff0000',
@@ -98,6 +103,9 @@
               });
 
               index65_95.addListener('click', function(e){
+                  index1959.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
                   index65_95.revertStyle();
                   index65_95.overrideStyle(e.feature, {
                       fillColor: '#390039',
@@ -133,6 +141,9 @@
               paLatLng = new google.maps.LatLng()
 
               indexPA.addListener('click', function(e){
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
                   indexPA.revertStyle();
                   indexPA.overrideStyle(e.feature, {
                       fillColor: '#b2d8b2',
@@ -166,6 +177,9 @@
               });
 
               indexNJ.addListener('click', function(e) {
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexPA.revertStyle();
                   indexNJ.revertStyle();
                   indexNJ.overrideStyle(e.feature, {
                       strokeColor: '#ff0000',
@@ -194,6 +208,7 @@
               $("#pac-input").geocomplete(options);
 
               google.maps.event.addListener(map, 'click', function() {
+                  infowindow.close();
                   index1959.revertStyle();
                   index65_95.revertStyle();
                   indexNJ.revertStyle();

@@ -141,7 +141,7 @@
                       strokeOpacity: 1
                   });
 
-                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2010 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2015 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
                   
                   // Popup Anchor //
                   var anchor = new google.maps.MVCObject();
@@ -176,7 +176,7 @@
                   });
 
 
-                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2015 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
 
                   // Popup Anchor //
                   var anchor = new google.maps.MVCObject();

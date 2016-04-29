@@ -7,7 +7,8 @@ $(document).ready(function() {
           var MY_MAPTYPE_ID = 'Basemap';
           var streeViewService = new google.maps.StreetViewService();
           var infowindow = new google.maps.InfoWindow();
-          var region = new google.maps.LatLng(39.950143, -75.170669);
+       
+          var region = new google.maps.LatLng(40.08, -75.170669);
 
           $("[name='my-checkbox']").bootstrapSwitch({
                onColor: 'warning',
@@ -189,6 +190,12 @@ $(document).ready(function() {
                   infowindow.open(map, anchor);
 
               });
+
+        $("#zoomToRegion").click(function(){
+            map.setCenter(new google.maps.LatLng(40.08, -75.170669));
+            map.setZoom(9);
+        });
+
               //Geocoding / Search Bar
               var options = {
                   map: map

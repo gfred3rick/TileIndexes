@@ -1,7 +1,4 @@
-
-          $(document).ready(function() {
-          //  $('[rel=tooltip]').tooltip();
-
+$(document).ready(function() {
           //OPEN ABOUT DIALOG
               $('#aboutModal').modal();
           });
@@ -9,11 +6,8 @@
           var map;
           var MY_MAPTYPE_ID = 'Basemap';
           var streeViewService = new google.maps.StreetViewService();
-
+          var infowindow = new google.maps.InfoWindow();
           var region = new google.maps.LatLng(39.950143, -75.170669);
-
-
-          // $('input[name="my-checkbox"]').bootstrapSwitch();
 
           $("[name='my-checkbox']").bootstrapSwitch({
                onColor: 'warning',
@@ -25,25 +19,34 @@
                labelWidth: 25,
                onSwitchChange: function(event,state){
                   var dataLayer = window[$(this).attr('data-layer')];
-                  var dataLabel = window[$(this).attr('data-label')];
                   var item = $(this);
                 
                   if (state === true) {
                       dataLayer.setMap(map);
-                      dataLabel.open(map);
+
                   } else {
                       dataLayer.setMap(null);
-                      dataLabel.hide();
                   }
               }
           });
 
+// Not working but a sample
+$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+ // var infowindow = new google.maps.InfoWindow();
+  console.log(this); // DOM element
+  console.log(event); // jQuery event
+  console.log(state); // true | false
+  if (state === true) {
+                  infowindow.close();
+                  } else {
+             infowindow.close();
+                  }
+});
+        
 ////////////////////////////////////////////////
 ////////////Initialize map on load//////////////
 ////////////////////////////////////////////////
           function initialize() {
-
-
             
               // Create a simple google map //
               map = new google.maps.Map(document.getElementById('map'), {
@@ -55,7 +58,6 @@
               map.enableKeyDragZoom();  
               
               var infowindow = new google.maps.InfoWindow();
-
               // 1959 INDEX DATA //
               index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');
@@ -139,10 +141,7 @@
                       fillOpacity: 0.35
                   }
               });
-
-          
-              paLatLng = new google.maps.LatLng()
-
+        
               indexPA.addListener('click', function(e){
                   index1959.revertStyle();
                   index65_95.revertStyle();
@@ -191,8 +190,6 @@
                       fillColor: '#b20000',
                       fillOpacity: 0.35
                   });
-
-
                   infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2015 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
 
                   // Popup Anchor //
@@ -202,7 +199,6 @@
                   infowindow.open(map, anchor);
 
               });
-
               //Geocoding / Search Bar
               var options = {
                   map: map
@@ -216,194 +212,8 @@
                   index65_95.revertStyle();
                   indexNJ.revertStyle();
                   indexPA.revertStyle();
-              });
-              
-              center59 = new google.maps.Data();
-              center59.loadGeoJson('data/DVRPC_1959_center.js');
-//              center59.setMap(map);
-              
-              center59.addListener('addfeature', function(e) {
-                  if (e.feature.getGeometry().getType() == "Point") {
-                      
-                        var center = e.feature.getGeometry().get();
-                        var centerProp = e.feature.getProperty('SHEET_ID');
-                        var centerDiv = document.createElement('div');
-                        centerDiv.innerHTML = centerProp;
-                        centerDiv.setAttribute("class", "index-text-59");
-
-
-                        myOptions = {
-                            content: centerDiv,
-                            boxStyle: {
-                                border: "none",
-                                textAlign: "center",
-                                fontSize: "16px",
-                                width: "150px"
-                            },
-                            disableAutoPan: true,
-                            pixelOffset: new google.maps.Size(-70,0),
-                            position: center,
-                            closeBoxURL: "",
-                            isHidden: true,
-                            pane: "mapPane",
-                            enableEventPropagation: true,
-                        };
-
-                        var centerLabel = new InfoBox(myOptions);
-                        centerLabel.setVisible({visible:false});
-//                        centerLabel.open(map)
-
-                        map.addListener('zoom_changed', function(){
-                            if (map.getZoom() >= 14) {
-                                centerLabel.open(map);
-                            }
-                            if (map.getZoom() < 14) {
-                                centerLabel.close();
-                            }
-                        })
-                    }
-              }) // CENTER 1959 //
-              
-              center65 = new google.maps.Data();
-              center65.loadGeoJson('data/DVRPC_1965_1995_center.js');
-//              center59.setMap(map);
-              
-              center65.addListener('addfeature', function(e) {
-                  if (e.feature.getGeometry().getType() == "Point") {
-                      
-                        var center = e.feature.getGeometry().get();
-                        var centerProp = e.feature.getProperty('SHEET_ID');
-                        var centerDiv = document.createElement('div');
-                        centerDiv.innerHTML = centerProp;
-                        centerDiv.setAttribute("class", "index-text-65");
-
-
-                        myOptions = {
-                            content: centerDiv,
-                            boxStyle: {
-                                border: "none",
-                                textAlign: "center",
-                                fontSize: "16px",
-                                width: "150px"
-                            },
-                            disableAutoPan: true,
-                            pixelOffset: new google.maps.Size(-70,0),
-                            position: center,
-                            closeBoxURL: "",
-                            isHidden: false,
-                            pane: "mapPane",
-                            enableEventPropagation: true,
-                        };
-
-                        var centerLabel = new InfoBox(myOptions);
-                        centerLabel.setVisible({visible:true});
-//                        centerLabel.open(map)
-
-                        map.addListener('zoom_changed', function(){
-                            if (map.getZoom() >= 14) {
-                                centerLabel.open(map);
-                            }
-                            if (map.getZoom() < 14) {
-                                centerLabel.close();
-                            }
-                        })
-                    }
-              }) // CENTER 1965-1995 //
-              
-              centerPA = new google.maps.Data();
-              centerPA.loadGeoJson('data/DVRPC_PA_center.js');
-//                            
-              centerPA.addListener('addfeature', function(e) {
-                  if (e.feature.getGeometry().getType() == "Point") {
-                      
-                        var center = e.feature.getGeometry().get();
-                        var centerProp = e.feature.getProperty('TILE_NUM');
-                        var centerDiv = document.createElement('div');
-                        centerDiv.innerHTML = centerProp;
-                        centerDiv.setAttribute("class", "index-text-PA");
-
-
-                        myOptions = {
-                            content: centerDiv,
-                            boxStyle: {
-                                border: "none",
-                                textAlign: "center",
-                                fontSize: "16px",
-                                width: "150px"
-                            },
-                            disableAutoPan: true,
-                            pixelOffset: new google.maps.Size(-70,0),
-                            position: center,
-                            closeBoxURL: "",
-                            isHidden: false,
-                            pane: "mapPane",
-                            enableEventPropagation: true,
-                        };
-
-                        var centerLabel = new InfoBox(myOptions);
-                        centerLabel.setVisible({visible:true});
-//                        centerLabel.open(map)
-
-                        map.addListener('zoom_changed', function(){
-                            if (map.getZoom() >= 14) {
-                                centerLabel.open(map);
-                            }
-                            if (map.getZoom() < 14) {
-                                centerLabel.close();
-                            }
-                        })
-                    }
-              }) // CENTER PENNYSLVANIA INDEX // 
-              
-              
-              centerNJ = new google.maps.Data();
-              centerNJ.loadGeoJson('data/DVRPC_NJ_center.js');
-//                            
-              centerNJ.addListener('addfeature', function(e) {
-                  if (e.feature.getGeometry().getType() == "Point") {
-                      
-                        var center = e.feature.getGeometry().get();
-                        var centerProp = e.feature.getProperty('TILE_NUM');
-                        var centerDiv = document.createElement('div');
-                        centerDiv.innerHTML = centerProp;
-                        centerDiv.setAttribute("class", "index-text-NJ");
-
-
-                        myOptions = {
-                            content: centerDiv,
-                            boxStyle: {
-                                border: "none",
-                                textAlign: "center",
-                                fontSize: "16px",
-                                width: "150px"
-                            },
-                            disableAutoPan: true,
-                            pixelOffset: new google.maps.Size(-70,0),
-                            position: center,
-                            closeBoxURL: "",
-                            isHidden: false,
-                            pane: "mapPane",
-                            enableEventPropagation: true,
-                        };
-
-                        var centerLabel = new InfoBox(myOptions);
-                        centerLabel.setVisible({visible:true});
-//                        centerLabel.open(map)
-
-                        map.addListener('zoom_changed', function(){
-                            if (map.getZoom() >= 14) {
-                                centerLabel.open(map);
-                            }
-                            if (map.getZoom() < 14) {
-                                centerLabel.close();
-                            }
-                        })
-                    }
-              })
-              
-              
+              });  
               
           } //END OF INITIALIZE
-
 
           google.maps.event.addDomListener(window, 'load', initialize);

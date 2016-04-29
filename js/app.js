@@ -23,26 +23,15 @@ $(document).ready(function() {
                 
                   if (state === true) {
                       dataLayer.setMap(map);
+                      map.infowindow.close();
 
                   } else {
                       dataLayer.setMap(null);
+                      map.infowindow.close();
                   }
               }
           });
-
-// Not working but a sample
-$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
- // var infowindow = new google.maps.InfoWindow();
-  console.log(this); // DOM element
-  console.log(event); // jQuery event
-  console.log(state); // true | false
-  if (state === true) {
-                  infowindow.close();
-                  } else {
-             infowindow.close();
-                  }
-});
-        
+    
 ////////////////////////////////////////////////
 ////////////Initialize map on load//////////////
 ////////////////////////////////////////////////
@@ -58,6 +47,7 @@ $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event
               map.enableKeyDragZoom();  
               
               var infowindow = new google.maps.InfoWindow();
+              map.infowindow = infowindow;
               // 1959 INDEX DATA //
               index1959 = new google.maps.Data();
               index1959.loadGeoJson('data/DVRPC_1959_index.js');

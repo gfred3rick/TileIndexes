@@ -27,13 +27,14 @@
                   var dataLayer = window[$(this).attr('data-layer')];
                   var dataLabel = window[$(this).attr('data-label')];
                   var item = $(this);
-                
+                  
                   if (state === true) {
                       dataLayer.setMap(map);
                       dataLabel.open(map);
                   } else {
                       dataLayer.setMap(null);
                       dataLabel.hide();
+                      map.infowindow.close();
                   }
               }
           });
@@ -55,6 +56,7 @@
               map.enableKeyDragZoom();  
               
               var infowindow = new google.maps.InfoWindow();
+              map.infowindow = infowindow;
 
               // 1959 INDEX DATA //
               index1959 = new google.maps.Data();

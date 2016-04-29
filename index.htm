@@ -177,6 +177,26 @@
         #pac-input:focus {
             border-color: #4d90fe;
         }
+        
+        .index-text-59 {
+            color: orange;
+            font-weight: bolder;
+        }
+        
+        .index-text-65{
+            color: purple;
+            font-weight: bolder;
+        }
+        
+        .index-text-PA {
+            color: green;
+            font-weight: bolder;
+        }
+        
+        .index-text-NJ {
+            color: red;
+            font-weight: bolder;
+        }
     </style>
 
 
@@ -200,7 +220,7 @@
                   <span class="icon-bar"></span>
               </button>
               <span>  
-                <a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:10px 0px 0px 4px" src="img/dvrpc_logo_small.png"/></a> 
+                <a href="http://www.dvrpc.org" target="_new"> <img class="pull-left" style="margin:8px 0px 0px 10px" src="img/logo_new.png"/></a> 
                 <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
               </span> 
           </div>
@@ -236,20 +256,20 @@
       <div class="row" id="container">
           <div id="legend-stack">
               <div class="legend-custom" id="tile59">
-                  <input type="checkbox" name="my-checkbox" data-layer="index1959" />
-                  <img src="img/tile59.png">
+                  <input type="checkbox" name="my-checkbox" data-layer="index1959" data-label="center59"/>
+                  <img src="img/tile59_new.png">
               </div>
               <div class="legend-custom" id="tile65">
                   <input type="checkbox" name="my-checkbox" data-layer="index65_95" />
-                  <img src="img/tile65.png">
+                  <img src="img/tile65_new.png">
               </div>
               <div class="legend-custom" id="tileNJ">
                   <input id="NJ" type="checkbox" name="my-checkbox" data-layer="indexNJ" checked />
-                  <img src="img/tileNJ.png">
+                  <img src="img/tileNJ_new.png">
               </div>
               <div class="legend-custom" id="tilePA">
                   <input type="checkbox" name="my-checkbox" data-layer="indexPA" checked />
-                  <img src="img/tilePA.png">  
+                  <img src="img/tilePA_new.png">  
               </div>
           </div>
           <div class="col-sm-12 col-lg-12" id="map"></div>
@@ -285,7 +305,7 @@
                               
                               <br>
                               
-                              <p>To search for a specific location use the search form <img src="img/search2.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
+                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
                           </div>
     
                           <div class="tab-pane fade text-danger" id="disclaimer">
@@ -336,12 +356,13 @@
                       <div id="legendTabsContent" class="tab-content" style="padding-top: 10px;">   
                           <div class="tab-pane fade active in" id="2000">
                               <h3>Orthoimagery</h3>
-                              <img  src="img/tilePA.png"/>
-                              <img  src="img/tileNJ.png"/> 
+                              <img  src="img/tilePA_new.png"/>
+                              <img  src="img/tileNJ_new.png"/> 
                               <br>
                               <ul>
                                   <li>The 2000 imagery is grayscale, with a pixel resolution of 1.5 feet</li>
                                   <li>The 2005 and 2010 imagery is natural color, with a pixel resolution of 1 foot</li>
+                                  <li>The 2015 imagery is 4-band (can be displayed as natural color or color infrared), with a pixel resolution of 1 foot</li>
                                   <li>The images are geo-referenced to the Pennsylvania State Plane (South Zone) NAD83 coordinate system</li>
                                   <li>Each year of orthoimagery has a horizontal positional accuracy of +/- 5 feet, and a design scale of 1 inch=200 feet</li>
                                   <li>There is no overlap between the orthoimagery tiles</li>
@@ -351,7 +372,7 @@
                           <div class="tab-pane fade " id="1965">
                               <h3>Historic Aerial Imagery</h3>
                               <div class="group">
-                                  <img id="legend" src="img/tile65.png"/>
+                                  <img id="legend" src="img/tile65_new.png"/>
                                   <br>
                                   <ul>    
                                       <li>The 1965 to 1995 imagery is grayscale</li> 
@@ -359,7 +380,7 @@
                                       <li>In 1965, only imagery for the urbanized portion of the region was acquired</li> 
                                       <li>Please note that certain tiles within the coverage area are missing</li> 
                                   </ul> 
-                                  <img id="legend" src="img/tile59.png"/>
+                                  <img id="legend" src="img/tile59_new.png"/>
                                   <br>
                                   <ul>
                                       <li>The 1959 imagery is grayscale</li> 
@@ -377,8 +398,10 @@
 
 
       <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script> 
+      <script src="js/infobox.js"></script>
       <script src="js/jquery.geocomplete.js"></script>
       <script src="js/bootstrap-switch.min.js"></script>
+      <script type="text/javascript" src="js/keydragzoom.js"></script>  
       <script type="text/javascript" src="js/app.js"> </script>
       <script >         
           var _gaq =[['_setAccount','UA-9825778-1'],['_trackPageview']];

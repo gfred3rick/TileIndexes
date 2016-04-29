@@ -25,12 +25,15 @@
                labelWidth: 25,
                onSwitchChange: function(event,state){
                   var dataLayer = window[$(this).attr('data-layer')];
+                  var dataLabel = window[$(this).attr('data-label')];
                   var item = $(this);
                 
                   if (state === true) {
                       dataLayer.setMap(map);
+                      dataLabel.open(map);
                   } else {
                       dataLayer.setMap(null);
+                      dataLabel.hide();
                   }
               }
           });
@@ -48,7 +51,9 @@
                   zoom: 9,
                   mapTypeId: google.maps.MapTypeId.HYBRID
               });
-
+              //enable KeyDragzoom function
+              map.enableKeyDragZoom();  
+              
               var infowindow = new google.maps.InfoWindow();
 
               // 1959 INDEX DATA //
@@ -66,6 +71,9 @@
               });
 
               index1959.addListener('click', function(e){
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
                   index1959.revertStyle();
                   index1959.overrideStyle(e.feature, {
                       fillColor: '#ff0000',
@@ -98,6 +106,9 @@
               });
 
               index65_95.addListener('click', function(e){
+                  index1959.revertStyle();
+                  indexNJ.revertStyle();
+                  indexPA.revertStyle();
                   index65_95.revertStyle();
                   index65_95.overrideStyle(e.feature, {
                       fillColor: '#390039',
@@ -133,6 +144,9 @@
               paLatLng = new google.maps.LatLng()
 
               indexPA.addListener('click', function(e){
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexNJ.revertStyle();
                   indexPA.revertStyle();
                   indexPA.overrideStyle(e.feature, {
                       fillColor: '#b2d8b2',
@@ -141,7 +155,7 @@
                       strokeOpacity: 1
                   });
 
-                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2010 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+                  infowindow.setContent("<div id='index-window'><b><font color='green'>2000-2015 PA INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
                   
                   // Popup Anchor //
                   var anchor = new google.maps.MVCObject();
@@ -166,6 +180,9 @@
               });
 
               indexNJ.addListener('click', function(e) {
+                  index1959.revertStyle();
+                  index65_95.revertStyle();
+                  indexPA.revertStyle();
                   indexNJ.revertStyle();
                   indexNJ.overrideStyle(e.feature, {
                       strokeColor: '#ff0000',
@@ -176,7 +193,7 @@
                   });
 
 
-                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2010 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
+                  infowindow.setContent("<div id='index-window'><b><font color='red'>2000-2015 NJ INDEX TILE NUMBER</font></b><br>" + e.feature.getProperty("TILE_NUM") + "</div>");
 
                   // Popup Anchor //
                   var anchor = new google.maps.MVCObject();
@@ -194,12 +211,199 @@
               $("#pac-input").geocomplete(options);
 
               google.maps.event.addListener(map, 'click', function() {
+                  infowindow.close();
                   index1959.revertStyle();
                   index65_95.revertStyle();
                   indexNJ.revertStyle();
                   indexPA.revertStyle();
               });
-          }
+              
+              center59 = new google.maps.Data();
+              center59.loadGeoJson('data/DVRPC_1959_center.js');
+//              center59.setMap(map);
+              
+              center59.addListener('addfeature', function(e) {
+                  if (e.feature.getGeometry().getType() == "Point") {
+                      
+                        var center = e.feature.getGeometry().get();
+                        var centerProp = e.feature.getProperty('SHEET_ID');
+                        var centerDiv = document.createElement('div');
+                        centerDiv.innerHTML = centerProp;
+                        centerDiv.setAttribute("class", "index-text-59");
+
+
+                        myOptions = {
+                            content: centerDiv,
+                            boxStyle: {
+                                border: "none",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                width: "150px"
+                            },
+                            disableAutoPan: true,
+                            pixelOffset: new google.maps.Size(-70,0),
+                            position: center,
+                            closeBoxURL: "",
+                            isHidden: true,
+                            pane: "mapPane",
+                            enableEventPropagation: true,
+                        };
+
+                        var centerLabel = new InfoBox(myOptions);
+                        centerLabel.setVisible({visible:false});
+//                        centerLabel.open(map)
+
+                        map.addListener('zoom_changed', function(){
+                            if (map.getZoom() >= 14) {
+                                centerLabel.open(map);
+                            }
+                            if (map.getZoom() < 14) {
+                                centerLabel.close();
+                            }
+                        })
+                    }
+              }) // CENTER 1959 //
+              
+              center65 = new google.maps.Data();
+              center65.loadGeoJson('data/DVRPC_1965_1995_center.js');
+//              center59.setMap(map);
+              
+              center65.addListener('addfeature', function(e) {
+                  if (e.feature.getGeometry().getType() == "Point") {
+                      
+                        var center = e.feature.getGeometry().get();
+                        var centerProp = e.feature.getProperty('SHEET_ID');
+                        var centerDiv = document.createElement('div');
+                        centerDiv.innerHTML = centerProp;
+                        centerDiv.setAttribute("class", "index-text-65");
+
+
+                        myOptions = {
+                            content: centerDiv,
+                            boxStyle: {
+                                border: "none",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                width: "150px"
+                            },
+                            disableAutoPan: true,
+                            pixelOffset: new google.maps.Size(-70,0),
+                            position: center,
+                            closeBoxURL: "",
+                            isHidden: false,
+                            pane: "mapPane",
+                            enableEventPropagation: true,
+                        };
+
+                        var centerLabel = new InfoBox(myOptions);
+                        centerLabel.setVisible({visible:true});
+//                        centerLabel.open(map)
+
+                        map.addListener('zoom_changed', function(){
+                            if (map.getZoom() >= 14) {
+                                centerLabel.open(map);
+                            }
+                            if (map.getZoom() < 14) {
+                                centerLabel.close();
+                            }
+                        })
+                    }
+              }) // CENTER 1965-1995 //
+              
+              centerPA = new google.maps.Data();
+              centerPA.loadGeoJson('data/DVRPC_PA_center.js');
+//                            
+              centerPA.addListener('addfeature', function(e) {
+                  if (e.feature.getGeometry().getType() == "Point") {
+                      
+                        var center = e.feature.getGeometry().get();
+                        var centerProp = e.feature.getProperty('TILE_NUM');
+                        var centerDiv = document.createElement('div');
+                        centerDiv.innerHTML = centerProp;
+                        centerDiv.setAttribute("class", "index-text-PA");
+
+
+                        myOptions = {
+                            content: centerDiv,
+                            boxStyle: {
+                                border: "none",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                width: "150px"
+                            },
+                            disableAutoPan: true,
+                            pixelOffset: new google.maps.Size(-70,0),
+                            position: center,
+                            closeBoxURL: "",
+                            isHidden: false,
+                            pane: "mapPane",
+                            enableEventPropagation: true,
+                        };
+
+                        var centerLabel = new InfoBox(myOptions);
+                        centerLabel.setVisible({visible:true});
+//                        centerLabel.open(map)
+
+                        map.addListener('zoom_changed', function(){
+                            if (map.getZoom() >= 14) {
+                                centerLabel.open(map);
+                            }
+                            if (map.getZoom() < 14) {
+                                centerLabel.close();
+                            }
+                        })
+                    }
+              }) // CENTER PENNYSLVANIA INDEX // 
+              
+              
+              centerNJ = new google.maps.Data();
+              centerNJ.loadGeoJson('data/DVRPC_NJ_center.js');
+//                            
+              centerNJ.addListener('addfeature', function(e) {
+                  if (e.feature.getGeometry().getType() == "Point") {
+                      
+                        var center = e.feature.getGeometry().get();
+                        var centerProp = e.feature.getProperty('TILE_NUM');
+                        var centerDiv = document.createElement('div');
+                        centerDiv.innerHTML = centerProp;
+                        centerDiv.setAttribute("class", "index-text-NJ");
+
+
+                        myOptions = {
+                            content: centerDiv,
+                            boxStyle: {
+                                border: "none",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                width: "150px"
+                            },
+                            disableAutoPan: true,
+                            pixelOffset: new google.maps.Size(-70,0),
+                            position: center,
+                            closeBoxURL: "",
+                            isHidden: false,
+                            pane: "mapPane",
+                            enableEventPropagation: true,
+                        };
+
+                        var centerLabel = new InfoBox(myOptions);
+                        centerLabel.setVisible({visible:true});
+//                        centerLabel.open(map)
+
+                        map.addListener('zoom_changed', function(){
+                            if (map.getZoom() >= 14) {
+                                centerLabel.open(map);
+                            }
+                            if (map.getZoom() < 14) {
+                                centerLabel.close();
+                            }
+                        })
+                    }
+              })
+              
+              
+              
+          } //END OF INITIALIZE
 
 
           google.maps.event.addDomListener(window, 'load', initialize);

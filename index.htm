@@ -97,10 +97,11 @@
         .search-container {
                 width: 350px;
          } 
-        @media (max-width: 992px) {
+        @media (max-width: 1190px) {
             .navbar .navbar-brand {
-                font-size: 22px;
-                float: left;
+                font-size: 13px;
+              
+                display: none;
             }
             .search-container {
                 width: 250px;
@@ -224,30 +225,21 @@
                 <a class="navbar-brand" href="#">Aerial Imagery Index Viewer</a> 
               </span> 
           </div>
-
           <div class="navbar-collapse collapse">
-           <!--       <form class="navbar-form navbar-right">
-                    <div class="input-group search-container">
-                        <input type="text" class="searchbox form-control" placeholder="Search">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
-                </form> -->
-
           <form class="navbar-form navbar-right">
                   <div class="input-group search-container">
-                      <input id="pac-input" class="form-control" type="text" placeholder="Search...">
+                      <input id="pac-input" class="form-control" type="text" placeholder="Enter address, city, or zip">
                       <span class="input-group-addon">
                           <i class="glyphicon glyphicon-search"></i>
                       </span>
                   </div>
               </form>
-              <ul class="nav navbar-nav">
+              <ul class="nav navbar-nav navbar-right">
               <li><a href="#aboutModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a>
               </li>
-              <li><a href="#contactModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#contactModal').modal('show'); return false;"><i class="icon-envelope " style="color: white"></i>&nbsp;&nbsp;Contact</a>
+              <li><a href="#legendModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Details</a>
               </li>
-              <li><a href="#legendModal" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#legendModal').modal('show'); return false;"><i class="icon-info-sign" style="color: white"></i>&nbsp;&nbsp;Legend</a>
-              </li>
+              <li id="zoomToRegion"><a href="javascript:void(0);"><i class="icon-fullscreen" style="color: white"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>   
               </ul>
               
           </div><!--/.navbar-collapse -->
@@ -289,8 +281,9 @@
 
                   <div class="modal-body">
                       <ul id="aboutTabs" class="nav nav-tabs">
-                          <li class="active"><a href="#about" data-toggle="tab"><i class=""></i>&nbsp;About</a></li>
-                          <li><a href="#disclaimer" data-toggle="tab"><i class="i"></i>&nbsp;Disclaimer</a></li>
+                          <li class="active"><a href="#about" data-toggle="tab"><i class="icon-question-sign"></i>&nbsp;&nbsp;About</a></li>
+                          <li><a href="#contact" data-toggle="tab"><i class="icon-envelope"></i>&nbsp;Contact</a></li>
+                          <li><a href="#disclaimer" data-toggle="tab"><i class="icon-exclamation-sign"></i>&nbsp;Disclaimer</a></li>
                       </ul>
                       <div id="aboutTabsContent" class="tab-content" style="padding-top: 10px;">
                           <div class="tab-pane fade active in" id="about">
@@ -305,7 +298,18 @@
                               
                               <br>
                               
-                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper rightcorner of the map. Type your desired location in the search box and press enter.</p>
+                              <p>To search for a specific location use the search form <img src="img/search.png"/> in the upper right corner of the map. Type your desired location in the search box and press enter.</p>
+                          </div>
+                          <div class="tab-pane fade" id="contact">
+                            <p><b>Resource Center</b>
+                          <br>
+                            Delaware Valley Regional Planning Commission<br>
+                            190 N. Independence Mall West, 8th Floor<br>
+                            Philadelphia, PA 19106<br>
+                            Phone: 215-238-2828<br>
+                            Fax: 215-592-9125<br>
+                          <a href="mailto:mapsales@dvrpc.org">mapsales@dvrpc.org</a><br/>
+                      </p>
                           </div>
     
                           <div class="tab-pane fade text-danger" id="disclaimer">
@@ -318,40 +322,18 @@
           </div><!-- /.modal-dialog -->
       </div><!-- /#aboutModal -->
 
-      <div class="modal fade" id="contactModal">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Contact Us!</h4>
-                  </div>
-                  <div class="modal-body">
-                      <p><b>Resource Center</b>
-                          <br>
-                            Delaware Valley Regional Planning Commission<br>
-                            190 N. Independence Mall West, 8th Floor<br>
-                            Philadelphia, PA 19106<br>
-                            Phone: 215-238-2828<br>
-                            Fax: 215-592-9125<br>
-                          <a href="mailto:mapsales@dvrpc.org">mapsales@dvrpc.org</a><br/>
-                      </p>
-                  </div><!-- /.modal-body -->
-              </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-      </div><!-- /.modal fade-->
-
       <div class="modal fade" id="legendModal">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Legend</h4>
+                      <h4 class="modal-title">Details</h4>
                   </div>
 
                   <div class="modal-body">
                       <ul id="aboutTabs" class="nav nav-tabs">
                           <li class="active"><a href="#2000" data-toggle="tab"><i class=""></i>&nbsp;Orthoimagery</a></li>
-                          <li><a href="#1965" data-toggle="tab"><i class="i"></i>&nbsp;Historical Imagery</a></li>
+                          <li><a href="#1965" data-toggle="tab"><i class="i"></i>&nbsp;Historical Aerial Imagery</a></li>
                       </ul>
                       <div id="legendTabsContent" class="tab-content" style="padding-top: 10px;">   
                           <div class="tab-pane fade active in" id="2000">
